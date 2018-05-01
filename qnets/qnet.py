@@ -37,13 +37,17 @@ class qnet:
 
     def nodeOf(self, a):
         for node in self.nodes:
-            for qubit in self.nodes[node]:
-                if qubit == a:
-                    return node
+            if a in self.nodes[node]:
+                return node
 
     def draw(self):
         nx.draw(self._graph(), with_labels=True, font_weight='bold')
         plt.show()
+
+    def swap(self, a, b, c):
+        # Get the first pair of qubits that entangled a to b.
+        for pair in self._getEntangled():
+            if 
 
     def _graph(self):
         # Create graph object.
@@ -54,26 +58,30 @@ class qnet:
             graph.add_node(node, qubits=self.nodes[node])
 
         # Generate edges.
-        graph.add_edges_from(self._getEdges())
+        graph.add_edges_from([
+            (self.nodeOf(pair[0]), self.nodeOf(pair[1]))
+            for pair in self._getEntangled()
+        ])
 
         # Return.
         return graph
 
-    def _getEdges(self):
+    def _getEntangled(self):
         # Find those qubits which are entagled using the Peres-Horodecki
         #   criterion.
-        entagledPairs = []
-        for a, b in itertools.product(self.qubits, self.qubits):
-            if entangled(self.state.ptrace([self.qubits.index(a), self.qubits.index(b)])):
-                entagledPairs.append((a, b))
-
-        # Convert qubits to nodes.
-        edges = []
-        for pair in entagledPairs:
-            edges.append((self.nodeOf(pair[0]), self.nodeOf(pair[1])))
+        entagledPairs = [
+            (a, b)
+            for a, b in itertools.product(self.qubits, self.qubits)
+            if entangled(
+                self.state.ptrace([
+                    self.qubits.index(a),
+                    self.qubits.index(b)
+                ])
+            )
+        ]
 
         # Return.
-        return edges
+        return entagledPairs
 
     def __getattr__(self, attr):
         if attr == 'graph':
