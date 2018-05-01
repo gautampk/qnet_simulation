@@ -16,8 +16,8 @@ def main():
         1/sqrt(2) * (q.qubit_states(2, [0, 0]) + q.qubit_states(2, [1, 1]))
     ))
     network = qnet(qubits, nodes, state)
-
-    print(network.edges)
+    network.draw()
+    
 
 if __name__ == '__main__':
     main()
