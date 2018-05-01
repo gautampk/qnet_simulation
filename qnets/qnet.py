@@ -45,9 +45,18 @@ class qnet:
         plt.show()
 
     def swap(self, a, b, c):
-        # Get the first pair of qubits that entangled a to b.
+        # Get a pair of qubits bridging a & b and b & c
         for pair in self._getEntangled():
-            if 
+            if self.nodeOf(pair[0]) == a and self.nodeOf(pair[1]) == b:
+                aTOb = pair
+            elif self.nodeOf(pair[0]) == b and self.nodeOf(pair[1]) == c:
+                bTOc = pair
+
+        try:
+            assert aTOb
+            assert bTOc
+        except Exception:
+            raise self.NetworkOperationError('No valid path found.') from None
 
     def _graph(self):
         # Create graph object.
@@ -94,3 +103,6 @@ class qnet:
             return len(self._graph().edges)
         else:
             raise AttributeError('No such attribute.')
+
+    class NetworkOperationError(Exception):
+        pass
