@@ -16,6 +16,6 @@ def proj(state):
 
 def entangled(state):
     if state.shape == (4, 4):
-        return(np.all(q.partial_transpose(state, [1, 0]).eigenenergies() >= 0))
+        return(np.any(q.partial_transpose(state, [1, 0]).eigenenergies() < 0))
     else:
         raise TypeError('The Peres-Horodecki criterion only works for pairs of qubits.')
