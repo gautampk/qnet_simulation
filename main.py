@@ -12,12 +12,11 @@ def main():
         'C': ['C']
     }
     state = proj(q.tensor(
-        1/sqrt(2) * (q.qubit_states(2, [0, 0]) + q.qubit_states(2, [1, 1])),
-        1/sqrt(2) * (q.qubit_states(2, [0, 0]) + q.qubit_states(2, [1, 1]))
+        q.bell_state(),
+        q.bell_state()
     ))
     network = qnet(qubits, nodes, state)
     network.draw()
     
-
 if __name__ == '__main__':
     main()
