@@ -51,3 +51,9 @@ class qnet:
             edges.append((self.nodeOf(pair[0]), self.nodeOf(pair[1])))
 
         return edges
+
+    def __getattr__(self, attr):
+        if attr == 'edges':
+            return self._edges()
+        else:
+            raise AttributeError('No such attribute.')
